@@ -3,6 +3,35 @@ import requests
 from dotenv import load_dotenv
 
 class AzureOpenAI:
+    """
+    A class to interact with the Azure OpenAI service.
+    Methods
+    -------
+    __init__():
+        Initializes the AzureOpenAI instance with environment variables and sets up the endpoint and headers.
+    send_message(message, **kwargs):
+        Sends a message to the Azure OpenAI service and returns the response.
+    Attributes
+    ----------
+    api_key : str
+        The API key for the Azure OpenAI service, loaded from environment variables.
+    endpoint : str
+        The endpoint URL for the Azure OpenAI service, constructed from environment variables.
+    deployment_name : str
+        The deployment name for the Azure OpenAI service, loaded from environment variables.
+    api_version : str
+        The API version for the Azure OpenAI service, loaded from environment variables.
+    headers : dict
+        The headers to be used in the HTTP request to the Azure OpenAI service.
+    payload : dict
+        The payload to be sent in the HTTP request to the Azure OpenAI service.
+    Raises
+    ------
+    ValueError
+        If the message parameter in send_message is neither a string nor a list of dictionaries.
+    requests.RequestException
+        If there is an issue with the HTTP request to the Azure OpenAI service.
+    """
     def __init__(self):
         load_dotenv()
         self.api_key = os.getenv('AZURE_OPENAI_API_KEY')

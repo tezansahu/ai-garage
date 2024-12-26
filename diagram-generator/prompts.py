@@ -86,28 +86,17 @@ The output must be a JSON object containing the following fields:
     }
 ]
 
-# RETRY_GENERATION_TO_FIX_ERROR = [
-#     {
-#         "role": "system",
-#         "content": """# Persona
-# You are a seasoned PlantUML tester & debugger. You will be given a faulty PlantUML syntax to fix, along with an SVG indicating the error. 
-
-# # Task
-# Your task is to correct the syntax and generate the full, fixed PlantUML syntax for the diagram. 
-
-# # Output
-# The output must be a JSON object containing the following fields:
-# - "explanation": "<Detailed explanation of the scenario illustrated by the diagram>"
-# - "plantuml_syntax": "<Fixed PlantUML syntax representing the diagram>"
-#     - Note: Do **NOT** add any ``` or code blocks around the syntax
-# """
-#     },
-#     {
-#         "role": "user",
-#         "content": "# Faulty PlantUML Syntax\n@startuml\nstart\n:Prompt Preparation;\n:Prepare Descriptive Text Prompt;\n\n:Prompt Evaluation;\ndiamond \"Is Prompt Ready?\" as isReady\nisReady -> No : No\n:Refine Prompt;\nstop\nisReady -> Yes : Yes\n\n:API Interaction;\n:Invoke OpenAI API;\n\n:Image Generation Attempts;\n:Counter = 0;\n\nwhile (Counter < 3) is (Generate Image)\n:Send Prompt to API;\n:Generate Image;\n\n:Quality Assessment;\ndiamond \"Is Image Quality Satisfactory?\" as isSatisfactory\nisSatisfactory -> No : No\n:Counter++;\n\nisSatisfactory -> Yes : Yes\n:Image Finalization;\n:Save Image;\nstop\nendwhile (Max Attempts Reached)\n\n:Process Termination;\nstop\n@enduml\n\n----------\n# Error\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" contentStyleType=\"text/css\" height=\"201px\" preserveAspectRatio=\"none\" style=\"width:393px;height:201px;background:#000000;\" version=\"1.1\" viewBox=\"0 0 393 201\" width=\"393px\" zoomAndPan=\"magnify\"><defs/><g><rect fill=\"#202420\" height=\"1\" style=\"stroke:#202420;stroke-width:1;\" width=\"1\" x=\"0\" y=\"0\"/><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"12\" font-style=\"italic\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"166.9219\" x=\"5\" y=\"17\">PlantUML 1.2024.9beta6</text><rect fill=\"#33FF02\" height=\"21.2969\" style=\"stroke:#33FF02;stroke-width:1;\" width=\"270.7852\" x=\"5\" y=\"26.9688\"/><text fill=\"#000000\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"171.2813\" x=\"6\" y=\"41.9688\">[From string (line 7) ]</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"4.874\" x=\"5\" y=\"62.2656\">&#160;</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"81.4229\" x=\"5\" y=\"78.5625\">@startuml</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"38.0693\" x=\"5\" y=\"94.8594\">start</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"167.7129\" x=\"5\" y=\"111.1563\">:Prompt Preparation;</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"270.7852\" x=\"5\" y=\"127.4531\">:Prepare Descriptive Text Prompt;</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"4.874\" x=\"5\" y=\"143.75\">&#160;</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"157.582\" x=\"5\" y=\"160.0469\">:Prompt Evaluation;</text><text fill=\"#33FF02\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" text-decoration=\"wavy underline\" textLength=\"315.8203\" x=\"5\" y=\"176.3438\">diamond \"Is Prompt Ready?\" as isReady</text><text fill=\"#FF0000\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" lengthAdjust=\"spacing\" textLength=\"376.2432\" x=\"9.874\" y=\"192.6406\">Syntax Error? (Assumed diagram type: activity)</text><!--SRC=[PLBBReCm4BpxArOv1KMLAlL6-X3gIpwqfQ6N7YtOD5R1Hbw79ltwhi7Ge5oCl9wTdPc5l79UfBcpJUiXTzWgfxosPXsAuORmW5GwtNhT8NpW8S02UYscliTErVlOLcdLM5F1Gb84mWPLTRnRW2BGr5z4_CB5BRnQIFaGwGQtsk34JjwsfxXF90RooNEpN88q7fqgerXfElkDyDQYoIJmUv0d6_M5y8m61rEGUOzCJjnmR_U106xWag4_ErqZBCVYDLmbh1MMiHUXfqf4MY1xYxwy7GQbSrIO_BvNjVP7o8YGg47ZvyaCoaPKmUfeorwict8whOdvTPPQbBnQyTXps7zeCOmdRNZcxxZZGdMJwZvmjXUpU567AQ-mmdA7LJBil6HF_2kuXia6ej3x1m00]--></g></svg>"
-#     },
-#     {
-#         "role": "assistant",
-#         "content": "{\"explanation\": \"This activity diagram outlines an iterative process for generating AI-driven images. It begins with Prompt Preparation and evaluation. If the prompt is ready, the system invokes the OpenAI API, initializing a loop for up to three image generation attempts. Each attempt involves sending the prompt, generating an image, and assessing its quality. If satisfactory, the image is saved; otherwise, the loop continues. If the prompt is not ready, it is refined. The process ends when an image is finalized or all attempts are exhausted.\",\n\"plantuml_syntax\": \"@startuml\\nstart\\n:Prompt Preparation;\\n:Prepare Descriptive Text Prompt;\\n\\n:Prompt Evaluation;\\nif (\\\"Is Prompt Ready?\\\") then (Yes)\\n  :API Interaction;\\n  :Invoke OpenAI API;\\n\\n  :Image Generation Attempts;\\n  :Counter = 0;\\n\\n  while (Counter < 3) is (Generate Image)\\n    :Send Prompt to API;\\n    :Generate Image;\\n\\n    :Quality Assessment;\\n    if (\\\"Is Image Quality Satisfactory?\\\") then (Yes)\\n      :Image Finalization;\\n      :Save Image;\\n      stop\\n    else (No)\\n      :Counter++;\\n    endif\\n  endwhile (Max Attempts Reached)\\n\\nelse (No)\\n  :Refine Prompt;\\n  stop\\nendif\\n\\n:Process Termination;\\nstop\\n@enduml\"}"
-#     }
-# ]
+PLANTUML_TO_OTHER = [
+    {
+        "role": "system",
+        "content": "You will be given the PlantUML syntax of a diagram, along with a target diagramming language. Your task is to convert the PlantUML syntax to the target diagramming language in the most accurate manner. Ensure that all elements, relationships, and styles are preserved and accurately represented in the target language. Output just the converted diagram syntax in the target language, without any additional information or explanation. Do **NOT** add any ``` or code blocks around the syntax."
+    },
+    {
+        "role": "user",
+        "content": '{"plantuml_syntax": "@startuml\\nAlice -> Bob: Hi Bob\\nBob --> Alice: Hello Alice\\nAlice -> Bob: How are you?\\nBob --> Alice: Doing well, thanks!\\n@enduml", "target_language": "Mermaid"}'
+    },
+    {
+        "role": "assistant",
+        "content": "sequenceDiagram\nAlice->>Bob: Hi Bob\nBob-->>Alice: Hello Alice\nAlice->>Bob: How are you?\nBob-->>Alice: Doing well, thanks!"
+    }
+]
