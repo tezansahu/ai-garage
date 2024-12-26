@@ -1,12 +1,17 @@
-# Diagram Generator
+# AI-Powered Diagram Generator
 
-This **AI-Powered Diagram Generator** leverages GPT-4o (Azure OpenAI) and PlantUML to convert textual descriptions and hand-drawn sketches into professional diagrams. This tool is designed to help visualize complex ideas and processes effortlessly.
+This **AI-Powered Diagram Generator** leverages GPT-4o (hosted on Azure OpenAI) and PlantUML to convert textual descriptions and hand-drawn sketches into professional diagrams. This tool is designed to help visualize complex ideas and processes effortlessly.
+
+Check out the demo 👇🏼
+
+[![AI-Powered Diagram Generator](./assets/thumbnail.png)](https://youtu.be/mK-5ExyDXUo)
 
 ## Features
   - Generate diagrams from textual descriptions.
   - Convert hand-drawn sketches into digital diagrams.
   - Download diagrams in SVG and PNG formats.
   - View detailed explanations and PlantUML syntax of generated diagrams.
+  - Convert the PlantUML syntax to any other diagramming language (GraphViz, Mermaid, etc.)
 
 ## Setup
 

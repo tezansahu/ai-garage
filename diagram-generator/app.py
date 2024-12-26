@@ -14,8 +14,6 @@ def init_session():
     """
     if "prev_mode" not in st.session_state:
         st.session_state.prev_mode = "From Text"
-    # if "text" not in st.session_state:
-    #     st.session_state.text = None
     if "response" not in st.session_state:
         st.session_state.response = None
     if "plantuml_svg" not in st.session_state:

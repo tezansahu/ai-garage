@@ -104,7 +104,7 @@ def get_sample_texts(text: str|None = None) -> List[Dict[str, str]]|str|None:
   - If satisfactory, finalize and save the image.
   - If unsatisfactory, increment the attempt counter and retry.
 - Termination: End the process when an image is finalized or all attempts are used."""},
-        {"display_text": "Concept for System Design Interview", "description": "Mindmap of the key concepts to study for a system design interview."},
+        {"display_text": "Concepts for System Design Interview", "description": "Mindmap of the key concepts to study for a system design interview."},
     ]
     if text:
         return next((item["description"] for item in texts if item["display_text"] == text), None)
