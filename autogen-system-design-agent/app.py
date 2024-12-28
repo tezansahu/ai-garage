@@ -7,14 +7,6 @@ load_dotenv()
 
 llm_config = {
     "config_list": [
-        # # Local LLM (Llama3.2-1B, inferenced through Ollama, using LiteLLM proxy)
-        # {
-        #     "model": "NotRequired",  # Loaded with LiteLLM command
-        #     "api_key": "NotRequired",  # Not needed
-        #     "base_url": "http://0.0.0.0:4000",  # Your LiteLLM URL
-        #     "price": [0, 0],  # Put in price per 1K tokens [prompt, response] as free!
-        # },
-
         # Azure OpenAI GPT-4o config
         {
             "api_type": "azure",
@@ -24,7 +16,6 @@ llm_config = {
             "api_version": os.getenv("AZURE_OPENAI_API_VERSION"),
         }
     ],
-    "cache_seed": None,  # Turns off caching, useful for testing different models
 }
 
 #########################
