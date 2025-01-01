@@ -1,6 +1,6 @@
 import json
 import streamlit as st
-from llm import AzureOpenAI
+from llm import LLMClient
 from prompts import *
 from utils import *
 
@@ -37,7 +37,7 @@ def cleanup():
 
 # Initialize session state variables at the start
 init_session()
-llm_client = AzureOpenAI()
+llm_client = LLMClient()
 
 # Streamlit UI setup
 st.header("AI-Powered Diagram Generator")
