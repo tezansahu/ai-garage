@@ -17,6 +17,7 @@ Whether you're just beginning your AI journey, honing your skills as a practitio
 ## Projects
 
 - [AI Powered Diagram Generator](./diagram-generator/)
+- [Multi-Agent System for Software System Design (Powered by AutoGen)](./autogen-system-design-agent/)
 
 > **More Projects Coming Soon**
 >
