@@ -1,0 +1,20 @@
+[project]
+name = "resume_aligner_crew"
+version = "0.1.0"
+description = "resume_aligner_crew using crewAI"
+authors = [{ name = "Tezan Sahu", email = "tezansahu@gmail.com" }]
+requires-python = ">=3.10,<=3.13"
+dependencies = [
+    "crewai[tools]>=0.86.0,<1.0.0"
+]
+
+[project.scripts]
+resume_aligner_crew = "resume_aligner_crew.main:run"
+run_crew = "resume_aligner_crew.main:run"
+train = "resume_aligner_crew.main:train"
+replay = "resume_aligner_crew.main:replay"
+test = "resume_aligner_crew.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
