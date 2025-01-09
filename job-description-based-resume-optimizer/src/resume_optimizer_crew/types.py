@@ -16,3 +16,4 @@ class JobDescriptionAnalysis(BaseModel):
 
 class OptimizedResume(BaseModel):
     resume_content: str
+    optimization_rationale: str

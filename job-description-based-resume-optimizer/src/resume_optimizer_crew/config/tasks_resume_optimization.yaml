@@ -24,7 +24,7 @@ analyze_job_description:
 
 fine_tune_resume:
   description: |
-    Based on the original resume contents from the file at {resume_path} and the analysis of the job description, rewrite the entire resume in well-formatted markdown to align with the job description & keywords, while maintaining truthfulness and accuracy.
+    Based on the original resume contents from the file at {resume_path} and the detailed analysis of the job description, rewrite the entire resume in well-formatted markdown to align with the job description & keywords, while maintaining truthfulness and accuracy.
     Also, take into acocunt the following recommendations from the analysis of this resume:
     {recommendations}
 
@@ -34,6 +34,7 @@ fine_tune_resume:
     3. Highlight & quantify the impact or outcome achieved in a point, wherever possible
     4. Adjust the presentation of skills and experiences to highlight alignment with the role.
     5. Ensure factual accuracy and do **NOT** add any fabricated points.
+    6. Explain the optimizations made w.r.t the job description along with the rationale behind them.
 
     Focus on:
     - Emphasizing any major skills that are directly align with the requirements of the job.
@@ -44,6 +45,6 @@ fine_tune_resume:
     - Output must be well-formatted markdown.
 
   expected_output: |
-    A revised resume with:
-    - content comprising the entire resume, rephrased & fine-tuned to align with the job description & optimized for ATS - in well-formatted markdown
+    - A revised version of the entire resume, rephrased & fine-tuned to align with the job description & optimized for ATS, in well-formatted markdown
+    - A detailed explanation of the changes made, along with the rationale behind each modification
   agent: alignment_specialist

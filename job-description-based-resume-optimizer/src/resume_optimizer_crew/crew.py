@@ -14,6 +14,11 @@ azure_llm = LLM(
 	api_version=os.getenv("AZURE_API_VERSION")
 )
 
+# ollama_llm = LLM(
+#     model="ollama/llama3.2:1b",
+#     base_url="http://localhost:11434"
+# )
+
 
 ###############################################
 # Agent crew to analyze the standalone resume #

@@ -16,6 +16,8 @@ if "resume_md_optimized" not in st.session_state:
     st.session_state.resume_md_optimized = None
 if "analysis_results" not in st.session_state:
     st.session_state.analysis_results = None
+if "optimization_rationale" not in st.session_state:
+    st.session_state.optimization_rationale = None
 
 
 st.title("Job Description Based Resume Optimizer")
@@ -49,6 +51,7 @@ if st.session_state.flow_successful:
     st.session_state.resume_md_original = read_file(flow.state.resume_markdown_path)
     st.session_state.resume_md_optimized = flow.state.resume_optimization_result.resume_content
     st.session_state.analysis_results = flow.state.resume_analysis_result
+    st.session_state.optimization_rationale = flow.state.resume_optimization_result.optimization_rationale
     
     col1, col2 = st.columns(2)
     with col1:
@@ -78,5 +81,9 @@ if st.session_state.flow_successful:
             label="Download Optimized Resume",
             data=st.session_state.resume_md_optimized,
             file_name="optimized_resume.md",
-            mime="text/markdown"
-        )       
+            mime="text/markdown",
+            use_container_width=True
+        )
+
+        with st.expander("Optimization Rationale"):
+            st.info(st.session_state.optimization_rationale)       
