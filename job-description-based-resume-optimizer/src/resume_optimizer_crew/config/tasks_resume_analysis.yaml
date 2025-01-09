@@ -1,0 +1,22 @@
+analyze_resume:
+  description: |
+    Analyze the uploaded resume file at {resume_path} to evaluate its current quality.
+
+    Key steps:
+    1. Identify core skills, experiences, and strengths highlighted in the resume.
+    2. Highlight areas that require improvement or refinement.
+    3. Provide specific recommendations to enhance the overall appeal of the resume.
+    4. Assign an overall score reflecting the quality of the resume.
+
+    Focus on:
+    - Identifying transferable skills and relevant accomplishments.
+    - Spotting redundant or unnecessary details.
+    - Ensuring the format and tone are professional.
+
+  expected_output: |
+    A detailed resume analysis containing:
+    - Identified strengths and core competencies
+    - Areas for improvement
+    - Specific recommendations to enhance the resume
+    - Overall score for the resume quality (between 0-100)
+  agent: resume_analyzer
