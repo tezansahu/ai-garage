@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "airbnb-agent"
+version = "0.1.0"
+description = ""
+authors = ["Tezan Sahu <tezansahu@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+browser-use = "^0.1.40"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
