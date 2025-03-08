@@ -1,0 +1,420 @@
+# Financial MOdeling Prep API Endpoints
+
+FMP is your source for the most reliable and accurate Stock Market API and Financial Data API available. Whether you're looking for real-time stock prices, financial statements, or historical data, we offer a comprehensive solution to meet all your financial data needs.
+
+Our platform provides free stock market data, including audited, standardized, and real-time updates of income statements, balance sheets, and cash flow statements on a quarterly and annual basis.
+
+We also offer a wide range of historical stock prices, from 1 minute, 15 minutes, 30 minutes, 1 hour and daily intervals, ensuring you have the data you need.
+
+Please contact us with any questions about APIs or pricing.
+
+To authorize your requests, add ?apikey=[your-api-key] at the end of every request.
+
+Note: When adding the API key to your requests, ensure to use &apikey= if other query parameters already exist in the endpoint.
+
+
+## Company Profile Data API
+
+Access detailed company profile data with the FMP Company Profile Data API. This API provides key financial and operational information for a specific stock symbol, including the company's market capitalization, stock price, industry, and much more.
+
+Endpoint:
+
+https://financialmodelingprep.com/stable/profile?symbol=AAPL
+
+Parameters
+
+| Query Parameter | Type   | Example |
+|-----------------|--------|---------|
+| symbol*         | string | AAPL    |
+
+(*) Required
+
+Response
+[
+	{
+		"symbol": "AAPL",
+		"price": 232.8,
+		"marketCap": 3500823120000,
+		"beta": 1.24,
+		"lastDividend": 0.99,
+		"range": "164.08-260.1",
+		"change": 4.79,
+		"changePercentage": 2.1008,
+		"volume": 0,
+		"averageVolume": 50542058,
+		"companyName": "Apple Inc.",
+		"currency": "USD",
+		"cik": "0000320193",
+		"isin": "US0378331005",
+		"cusip": "037833100",
+		"exchangeFullName": "NASDAQ Global Select",
+		"exchange": "NASDAQ",
+		"industry": "Consumer Electronics",
+		"website": "https://www.apple.com",
+		"description": "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, and HomePod. It also provides AppleCare support and cloud services; and operates various platforms, including the App Store that allow customers to discov...",
+		"ceo": "Mr. Timothy D. Cook",
+		"sector": "Technology",
+		"country": "US",
+		"fullTimeEmployees": "164000",
+		"phone": "(408) 996-1010",
+		"address": "One Apple Park Way",
+		"city": "Cupertino",
+		"state": "CA",
+		"zip": "95014",
+		"image": "https://images.financialmodelingprep.com/symbol/AAPL.png",
+		"ipoDate": "1980-12-12",
+		"defaultImage": false,
+		"isEtf": false,
+		"isActivelyTrading": true,
+		"isAdr": false,
+		"isFund": false
+	}
+]
+
+## Balance Sheet Data API
+Access detailed balance sheet statements for publicly traded companies with the Balance Sheet Data API. Analyze assets, liabilities, and shareholder equity to gain insights into a company's financial health.
+
+Endpoint:
+
+https://financialmodelingprep.com/stable/balance-sheet-statement?symbol=AAPL
+
+Parameters
+
+| Query Parameter | Type   | Example |
+|-----------------|--------|---------|
+| symbol*         | string | AAPL    |
+| limit           | number | 5       |
+| period          | string | FY      |
+
+Response:
+[
+	{
+		"date": "2024-09-28",
+		"symbol": "AAPL",
+		"reportedCurrency": "USD",
+		"cik": "0000320193",
+		"filingDate": "2024-11-01",
+		"acceptedDate": "2024-11-01 06:01:36",
+		"fiscalYear": "2024",
+		"period": "FY",
+		"cashAndCashEquivalents": 29943000000,
+		"shortTermInvestments": 35228000000,
+		"cashAndShortTermInvestments": 65171000000,
+		"netReceivables": 66243000000,
+		"accountsReceivables": 33410000000,
+		"otherReceivables": 32833000000,
+		"inventory": 7286000000,
+		"prepaids": 0,
+		"otherCurrentAssets": 14287000000,
+		"totalCurrentAssets": 152987000000,
+		"propertyPlantEquipmentNet": 45680000000,
+		"goodwill": 0,
+		"intangibleAssets": 0,
+		"goodwillAndIntangibleAssets": 0,
+		"longTermInvestments": 91479000000,
+		"taxAssets": 19499000000,
+		"otherNonCurrentAssets": 55335000000,
+		"totalNonCurrentAssets": 211993000000,
+		"otherAssets": 0,
+		"totalAssets": 364980000000,
+		"totalPayables": 95561000000,
+		"accountPayables": 68960000000,
+		"otherPayables": 26601000000,
+		"accruedExpenses": 0,
+		"shortTermDebt": 20879000000,
+		"capitalLeaseObligationsCurrent": 1632000000,
+		"taxPayables": 26601000000,
+		"deferredRevenue": 8249000000,
+		"otherCurrentLiabilities": 50071000000,
+		"totalCurrentLiabilities": 176392000000,
+		"longTermDebt": 85750000000,
+		"deferredRevenueNonCurrent": 10798000000,
+		"deferredTaxLiabilitiesNonCurrent": 0,
+		"otherNonCurrentLiabilities": 35090000000,
+		"totalNonCurrentLiabilities": 131638000000,
+		"otherLiabilities": 0,
+		"capitalLeaseObligations": 12430000000,
+		"totalLiabilities": 308030000000,
+		"treasuryStock": 0,
+		"preferredStock": 0,
+		"commonStock": 83276000000,
+		"retainedEarnings": -19154000000,
+		"additionalPaidInCapital": 0,
+		"accumulatedOtherComprehensiveIncomeLoss": -7172000000,
+		"otherTotalStockholdersEquity": 0,
+		"totalStockholdersEquity": 56950000000,
+		"totalEquity": 56950000000,
+		"minorityInterest": 0,
+		"totalLiabilitiesAndTotalEquity": 364980000000,
+		"totalInvestments": 126707000000,
+		"totalDebt": 106629000000,
+		"netDebt": 76686000000
+	}
+]
+
+## Cash Flow Statement API
+Gain insights into a company's cash flow activities with the Cash Flow Statements API. Analyze cash generated and used from operations, investments, and financing activities to evaluate the financial health and sustainability of a business.
+
+Endpoint:
+
+https://financialmodelingprep.com/stable/cash-flow-statement?symbol=AAPL
+
+Parameters
+
+| Query Parameter | Type   | Example |
+|-----------------|--------|---------|
+| symbol*         | string | AAPL    |
+| limit           | number | 5       |
+| period          | string | FY      |
+
+Response:
+[
+	{
+		"date": "2024-09-28",
+		"symbol": "AAPL",
+		"reportedCurrency": "USD",
+		"cik": "0000320193",
+		"filingDate": "2024-11-01",
+		"acceptedDate": "2024-11-01 06:01:36",
+		"fiscalYear": "2024",
+		"period": "FY",
+		"netIncome": 93736000000,
+		"depreciationAndAmortization": 11445000000,
+		"deferredIncomeTax": 0,
+		"stockBasedCompensation": 11688000000,
+		"changeInWorkingCapital": 3651000000,
+		"accountsReceivables": -5144000000,
+		"inventory": -1046000000,
+		"accountsPayables": 6020000000,
+		"otherWorkingCapital": 3821000000,
+		"otherNonCashItems": -2266000000,
+		"netCashProvidedByOperatingActivities": 118254000000,
+		"investmentsInPropertyPlantAndEquipment": -9447000000,
+		"acquisitionsNet": 0,
+		"purchasesOfInvestments": -48656000000,
+		"salesMaturitiesOfInvestments": 62346000000,
+		"otherInvestingActivities": -1308000000,
+		"netCashProvidedByInvestingActivities": 2935000000,
+		"netDebtIssuance": -5998000000,
+		"longTermNetDebtIssuance": -9958000000,
+		"shortTermNetDebtIssuance": 3960000000,
+		"netStockIssuance": -94949000000,
+		"netCommonStockIssuance": -94949000000,
+		"commonStockIssuance": 0,
+		"commonStockRepurchased": -94949000000,
+		"netPreferredStockIssuance": 0,
+		"netDividendsPaid": -15234000000,
+		"commonDividendsPaid": -15234000000,
+		"preferredDividendsPaid": 0,
+		"otherFinancingActivities": -5802000000,
+		"netCashProvidedByFinancingActivities": -121983000000,
+		"effectOfForexChangesOnCash": 0,
+		"netChangeInCash": -794000000,
+		"cashAtEndOfPeriod": 29943000000,
+		"cashAtBeginningOfPeriod": 30737000000,
+		"operatingCashFlow": 118254000000,
+		"capitalExpenditure": -9447000000,
+		"freeCashFlow": 108807000000,
+		"incomeTaxesPaid": 26102000000,
+		"interestPaid": 0
+	}
+]
+
+## Key Metrics API
+Access essential financial metrics for a company with the FMP Financial Key Metrics API. Evaluate revenue, net income, P/E ratio, and more to assess performance and compare it to competitors.
+
+Endpoint:
+
+https://financialmodelingprep.com/stable/key-metrics?symbol=AAPL
+
+Parameters:
+
+| Query Parameter | Type   | Example |
+|-----------------|--------|---------|
+| symbol*         | string | AAPL    |
+| limit           | number | 10      |
+| period          | string | FY      |
+
+(*) Required
+
+
+Response:
+
+[
+	{
+		"symbol": "AAPL",
+		"date": "2024-09-28",
+		"fiscalYear": "2024",
+		"period": "FY",
+		"reportedCurrency": "USD",
+		"marketCap": 3495160329570,
+		"enterpriseValue": 3571846329570,
+		"evToSales": 9.134339201273542,
+		"evToOperatingCashFlow": 30.204866893043786,
+		"evToFreeCashFlow": 32.82735788662494,
+		"evToEBITDA": 26.524727497716487,
+		"netDebtToEBITDA": 0.5694744580836323,
+		"currentRatio": 0.8673125765340832,
+		"incomeQuality": 1.2615643936161134,
+		"grahamNumber": 22.587017267616833,
+		"grahamNetNet": -12.352478525015636,
+		"taxBurden": 0.7590881483581001,
+		"interestBurden": 1.0021831580314244,
+		"workingCapital": -23405000000,
+		"investedCapital": 22275000000,
+		"returnOnAssets": 0.25682503150857583,
+		"operatingReturnOnAssets": 0.3434290787011036,
+		"returnOnTangibleAssets": 0.25682503150857583,
+		"returnOnEquity": 1.6459350307287095,
+		"returnOnInvestedCapital": 0.4430708117427921,
+		"returnOnCapitalEmployed": 0.6533607652660827,
+		"earningsYield": 0.026818798327209237,
+		"freeCashFlowYield": 0.03113076074921754,
+		"capexToOperatingCashFlow": 0.07988736110406414,
+		"capexToDepreciation": 0.8254259501965924,
+		"capexToRevenue": 0.02415896275269477,
+		"salesGeneralAndAdministrativeToRevenue": 0,
+		"researchAndDevelopementToRevenue": 0.08022299794136074,
+		"stockBasedCompensationToRevenue": 0.02988990755303234,
+		"intangiblesToTotalAssets": 0,
+		"averageReceivables": 63614000000,
+		"averagePayables": 65785500000,
+		"averageInventory": 6808500000,
+		"daysOfSalesOutstanding": 61.83255974529134,
+		"daysOfPayablesOutstanding": 119.65847721913745,
+		"daysOfInventoryOutstanding": 12.642570548414087,
+		"operatingCycle": 74.47513029370543,
+		"cashConversionCycle": -45.18334692543202,
+		"freeCashFlowToEquity": 32121000000,
+		"freeCashFlowToFirm": 117192805288.09166,
+		"tangibleAssetValue": 56950000000,
+		"netCurrentAssetValue": -155043000000
+	}
+]
+
+
+## Financial Ratios API
+Globe Flag
+Analyze a company's financial performance using the Financial Ratios API. This API provides detailed profitability, liquidity, and efficiency ratios, enabling users to assess a company's operational and financial health across various metrics.
+
+Endpoint:
+
+https://financialmodelingprep.com/stable/ratios?symbol=AAPL
+
+Parameters:
+
+| Query Parameter | Type   | Example |
+|-----------------|--------|---------|
+| symbol*         | string | AAPL    |
+| limit           | number | 10      |
+| period          | string | FY      |
+
+(*) Required
+
+Response:
+[
+	{
+		"symbol": "AAPL",
+		"date": "2024-09-28",
+		"fiscalYear": "2024",
+		"period": "FY",
+		"reportedCurrency": "USD",
+		"grossProfitMargin": 0.4620634981523393,
+		"ebitMargin": 0.31510222870075566,
+		"ebitdaMargin": 0.3443707085043538,
+		"operatingProfitMargin": 0.31510222870075566,
+		"pretaxProfitMargin": 0.3157901466620635,
+		"continuousOperationsProfitMargin": 0.23971255769943867,
+		"netProfitMargin": 0.23971255769943867,
+		"bottomLineProfitMargin": 0.23971255769943867,
+		"receivablesTurnover": 5.903038811648023,
+		"payablesTurnover": 3.0503480278422272,
+		"inventoryTurnover": 28.870710952511665,
+		"fixedAssetTurnover": 8.560310858143607,
+		"assetTurnover": 1.0713874732862074,
+		"currentRatio": 0.8673125765340832,
+		"quickRatio": 0.8260068483831466,
+		"solvencyRatio": 0.3414634938155374,
+		"cashRatio": 0.16975259648963673,
+		"priceToEarningsRatio": 37.287278415656736,
+		"priceToEarningsGrowthRatio": -45.93792700808932,
+		"forwardPriceToEarningsGrowthRatio": -45.93792700808932,
+		"priceToBookRatio": 61.37243774486391,
+		"priceToSalesRatio": 8.93822887866815,
+		"priceToFreeCashFlowRatio": 32.12256867269569,
+		"priceToOperatingCashFlowRatio": 29.55638142954995,
+		"debtToAssetsRatio": 0.29215025480848267,
+		"debtToEquityRatio": 1.872326602282704,
+		"debtToCapitalRatio": 0.6518501763673821,
+		"longTermDebtToCapitalRatio": 0.6009110021023125,
+		"financialLeverageRatio": 6.408779631255487,
+		"workingCapitalTurnoverRatio": -31.099932397502684,
+		"operatingCashFlowRatio": 0.6704045534944896,
+		"operatingCashFlowSalesRatio": 0.3024128274962599,
+		"freeCashFlowOperatingCashFlowRatio": 0.9201126388959359,
+		"debtServiceCoverageRatio": 5.024761722304708,
+		"interestCoverageRatio": 0,
+		"shortTermOperatingCashFlowCoverageRatio": 5.663777000814215,
+		"operatingCashFlowCoverageRatio": 1.109022873702276,
+		"capitalExpenditureCoverageRatio": 12.517624642743728,
+		"dividendPaidAndCapexCoverageRatio": 4.7912969490701345,
+		"dividendPayoutRatio": 0.16252026969360758,
+		"dividendYield": 0.0043585983369965175,
+		"dividendYieldPercentage": 0.43585983369965176,
+		"revenuePerShare": 25.484914639368924,
+		"netIncomePerShare": 6.109054070954992,
+		"interestDebtPerShare": 6.949329249507765,
+		"cashPerShare": 4.247388013764271,
+		"bookValuePerShare": 3.711600978715614,
+		"tangibleBookValuePerShare": 3.711600978715614,
+		"shareholdersEquityPerShare": 3.711600978715614,
+		"operatingCashFlowPerShare": 7.706965094592383,
+		"capexPerShare": 0.6156891035281195,
+		"freeCashFlowPerShare": 7.091275991064264,
+		"netIncomePerEBT": 0.7590881483581001,
+		"ebtPerEbit": 1.0021831580314244,
+		"priceToFairValue": 61.37243774486391,
+		"debtToMarketCap": 0.03050761336980449,
+		"effectiveTaxRate": 0.24091185164189982,
+		"enterpriseValueMultiple": 26.524727497716487
+	}
+]
+
+
+Stock Quote API
+Access real-time stock quotes with the FMP Stock Quote API. Get up-to-the-minute prices, changes, and volume data for individual stocks.
+
+Endpoint:
+
+https://financialmodelingprep.com/stable/quote?symbol=AAPL
+
+Parameters:
+| Query Parameter | Type   | Example |
+|-----------------|--------|---------|
+| symbol*         | string | AAPL    |
+
+(*) Required
+
+Response:
+[
+	{
+		"symbol": "AAPL",
+		"name": "Apple Inc.",
+		"price": 232.8,
+		"changePercentage": 2.1008,
+		"change": 4.79,
+		"volume": 44489128,
+		"dayLow": 226.65,
+		"dayHigh": 233.13,
+		"yearHigh": 260.1,
+		"yearLow": 164.08,
+		"marketCap": 3500823120000,
+		"priceAvg50": 240.2278,
+		"priceAvg200": 219.98755,
+		"exchange": "NASDAQ",
+		"open": 227.2,
+		"previousClose": 228.01,
+		"timestamp": 1738702801
+	}
+]
+
