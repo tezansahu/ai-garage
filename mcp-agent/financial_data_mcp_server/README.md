@@ -48,4 +48,4 @@ The code generated, used as is, works perfectly.
     - MCP Server should start running at `http://localhost:3000`
     - The MCP Inspector should start at `http://localhost:5173` - go here & test your tools
 
-- To **run** teh MCP server for deployment, run `python mcp_server.py`
+- To **run** the MCP server for deployment, run `python mcp_server.py`

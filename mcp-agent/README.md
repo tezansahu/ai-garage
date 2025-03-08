@@ -6,7 +6,7 @@ This project implements an AI agent using the **Model Context Protocol (MCP)** a
 It consists of an MCP Client with a command-line interface that can connect to different MCP Servers, including a **Financial Data Server** leveraging the Financial Modeling Prep (FMP) API to help answer users' questions.
 
 ## What is MCP?
-The Model Context Protocol (MCP) is a specification for communication between large language models (LLMs) and external tools/services. Developed by Microsoft Research, MCP addresses several critical challenges in AI agent development:
+The Model Context Protocol (MCP) is a specification for communication between large language models (LLMs) and external tools/services. Developed by Anthropic, MCP addresses several critical challenges in AI agent development:
 
 ### Why MCP Matters
 - **Standardized Tool Calling:** MCP provides a consistent interface for LLMs to interact with tools, reducing implementation complexity.
@@ -72,9 +72,9 @@ sequenceDiagram
 ## Implemented Features
 
 ### MCP Client
-- Command-line interface for user interactions
-- Support for multiple LLM providers (Azure OpenAI, OpenAI, Ollama)
-- Provides tools for accessing financial data via the Financial Modeling Prep API:
+- Beautiful command-line interface for user interactions
+- Connects to the financial data MCP server
+- Supports multiple LLM providers (Azure OpenAI, OpenAI, Ollama)
 
 ### Financial Data MCP Server
 Provides tools for accessing financial data via the Financial Modeling Prep API:
@@ -102,7 +102,7 @@ Before using this AI agent, ensure you have the following:
 
 1. Clone the repository & get into the project directory
     ```sh
-    git clone https://github.com/yourusername/ai-garage.git
+    git clone https://github.com/tezansahu/ai-garage.git
     cd ai-garage/mcp-agent
     ```
 
