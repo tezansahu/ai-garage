@@ -24,7 +24,7 @@ Check out the demo 👇🏼
   1. Clone the repository & get into the project directory
      ```sh
      git clone https://github.com/tezansahu/ai-garage.git
-     cd diagram-generator
+     cd ai-garage/diagram-generator
      ```
   2. Install dependencies using Poetry:
      ```sh
