@@ -5,6 +5,15 @@ import argparse
 from typing import Optional
 from contextlib import AsyncExitStack
 
+from rich.console import Console
+from rich.panel import Panel
+from rich.markdown import Markdown
+from rich.table import Table
+from rich import box
+from rich.progress import Progress, SpinnerColumn, TextColumn
+import colorama
+from colorama import Fore, Style
+
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
@@ -31,7 +40,14 @@ def parse_args():
     )
     return parser.parse_args()
 
-load_dotenv()  # load environment variables from .env
+# Initialize colorama for Windows support
+colorama.init()
+
+# Create Rich console
+console = Console()
+
+# Load environment variables from .env
+load_dotenv()
 
 class MCPClient:
     def __init__(self, llm_provider: str = "azure", model: str = "gpt-4o", use_python_executable_from_venv: bool = True):
@@ -85,28 +101,47 @@ class MCPClient:
         Args:
             server_script_path: Path to the server script (.py or .js)
         """
-        is_python = server_script_path.endswith('.py')
-        is_js = server_script_path.endswith('.js')
-        if not (is_python or is_js):
-            raise ValueError("Server script must be a .py or .js file")
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[bold blue]Connecting to server..."),
+            transient=True,
+        ) as progress:
+            progress.add_task("", total=None)
+            is_python = server_script_path.endswith('.py')
+            is_js = server_script_path.endswith('.js')
+            if not (is_python or is_js):
+                raise ValueError("Server script must be a .py or .js file")
+                
+            command = self.python_executable if is_python else "node"
+            server_params = StdioServerParameters(
+                command=command,
+                args=[server_script_path],
+                env=None
+            )
             
-        command = self.python_executable if is_python else "node"
-        server_params = StdioServerParameters(
-            command=command,
-            args=[server_script_path],
-            env=None
-        )
+            stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
+            self.stdio, self.write = stdio_transport
+            self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+            
+            await self.session.initialize()
+
+            # List available tools
+            response = await self.session.list_tools()
+            tools = response.tools
         
-        stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
-        self.stdio, self.write = stdio_transport
-        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+        # Create a nice table for tools
+        table = Table(show_header=True, header_style="bold magenta", box=box.ROUNDED)
+        table.add_column("Available Tools")
+        for tool in tools:
+            table.add_row(tool.name)
         
-        await self.session.initialize()
-        
-        # List available tools
-        response = await self.session.list_tools()
-        tools = response.tools
-        print("\nConnected to server with tools:", [tool.name for tool in tools])
+        console.print()
+        console.print(Panel.fit(
+            "🚀 [bold green]Connection Successful![/]", 
+            title="MCP Server", 
+            border_style="green"
+        ))
+        console.print(table)
 
     async def process_query(self, query: str) -> str:
         """Process a query using LLM and available tools"""
@@ -124,14 +159,22 @@ class MCPClient:
         response = await self.session.list_tools()
         available_tools = [utils.convert_mcp_tool_to_litellm_tool(tool) for tool in response.tools]
 
-        # Initial LLM call
-        llm_response = litellm.completion(
-            model = "{0}/{1}".format(self.llm_provider, self.model),
-            messages=messages,
-            tools=available_tools,
-            tool_choice="auto",
-            api_base=self.__get_base_url(),
-        )
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[bold cyan]LLM is thinking..."),
+            transient=True,
+        ) as progress:
+            task = progress.add_task("", total=None)
+            
+            # Initial LLM Call
+            llm_response = await asyncio.to_thread(
+                litellm.completion,
+                model = "{0}/{1}".format(self.llm_provider, self.model),
+                messages=messages,
+                tools=available_tools,
+                tool_choice="auto",
+                api_base=self.__get_base_url(),
+            )
 
         response = llm_response.choices[0].message
         while response.tool_calls:
@@ -141,8 +184,16 @@ class MCPClient:
                 tool_args = json.loads(tool.function.arguments)
 
                 # Execute tool call
-                print(f"[Internal] Calling tool: {tool_name} with args: {tool_args}")
-                result = await self.session.call_tool(tool_name, tool_args)
+                console.print(f"[dim cyan]Using tool:[/] [bold yellow]{tool_name}[/] [dim cyan]with args:[/] [bold yellow]{tool_args}[/] ")
+                
+                with Progress(
+                    SpinnerColumn(),
+                    TextColumn(f"[cyan]Processing with {tool_name}..."),
+                    transient=True,
+                ) as progress:
+                    task = progress.add_task("", total=None)
+                    result = await self.session.call_tool(tool_name, tool_args)
+                    
                 tool_invocations.append({"tool": tool_name, "args": tool_args, "result": result})
 
             # Continue conversation with tool results
@@ -156,14 +207,20 @@ class MCPClient:
                 "content": self.__stringify_tool_invocations(tool_invocations)
             })
 
-            # Get next response from LLM
-            llm_response = litellm.completion(
-                model = "{0}/{1}".format(self.llm_provider, self.model), 
-                messages=messages,
-                tools=available_tools,
-                tool_choice="auto",
-                api_base=self.__get_base_url(),
-            )
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[bold cyan]LLM is processing results..."),
+                transient=True,
+            ) as progress:
+                task = progress.add_task("", total=None)
+                # Get next response from LLM
+                llm_response = litellm.completion(
+                    model = "{0}/{1}".format(self.llm_provider, self.model), 
+                    messages=messages,
+                    tools=available_tools,
+                    tool_choice="auto",
+                    api_base=self.__get_base_url(),
+                )
 
             response = llm_response.choices[0].message
 
@@ -172,21 +229,30 @@ class MCPClient:
     
     async def chat_loop(self):
         """Run an interactive chat loop"""
-        print("\nMCP Agent Started!")
-        print("Type your queries or 'quit' to exit.")
+        console.print(Panel.fit(
+            "✨ [bold green]MCP Agent Started![/]\n"
+            "[cyan]Type your queries or 'quit' to exit.[/]", 
+            border_style="magenta"
+        ))
         
         while True:
             try:
-                query = input("\nQuery: ").strip()
+                console.print()
+                query = console.input("[bold blue]You: [/]").strip()
                 
                 if query.lower() == 'quit':
+                    console.print("[bold yellow]Goodbye! 👋[/]")
                     break
                     
                 response = await self.process_query(query)
-                print("\n" + response)
+                
+                # Format the response as markdown
+                md = Markdown(response)
+                console.print()
+                console.print(Panel(md, title="🤖 Assistant", border_style="green"))
                     
             except Exception as e:
-                print(f"\nError: {str(e)}")
+                console.print(Panel(f"[bold red]Error:[/] {str(e)}", border_style="red"))
 
     async def cleanup(self):
         """Clean up resources"""
@@ -195,13 +261,20 @@ class MCPClient:
 async def main():
     args = parse_args()
     server_path = utils.get_server_path_for_available_servers(args.server)
-        
+
+    # Show welcome banner
+    console.print()
+    console.rule("[bold blue]MCP Agent - AI Garage[/]")
+    console.print()
+
     client = MCPClient(args.llm_provider, args.model)
     try:
         await client.connect_to_server(server_path)
         await client.chat_loop()
     finally:
         await client.cleanup()
+        console.print()
+        console.rule("[bold blue]Session Ended[/]")
 
 if __name__ == "__main__":
     import sys
