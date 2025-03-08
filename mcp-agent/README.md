@@ -152,6 +152,8 @@ Before using this AI agent, ensure you have the following:
     - "Compare financial ratios between Tesla and Ford."
 - Type `quit` to exit the chat loop.
 
+> [Optional] Feel free to comment out line number 534 (`logger.info(f"Processing request of type {type(req).__name__}")`) in `.venv/Lib/site-packages/mcp/server/lowlevel/server.py`
+
 #### LLM Provider Configurations
 
 The client supports different LLM providers:
