@@ -1,0 +1,14 @@
+[project]
+name = "debate-simulation-using-autogen-and-chainlit"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "autogen-agentchat>=0.4.9.2",
+    "autogen-ext[azure,openai,ollama]>=0.4.9.2",
+    "chainlit>=2.4.1",
+    "crawl4ai",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.2",
+]
