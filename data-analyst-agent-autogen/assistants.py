@@ -101,34 +101,41 @@ class TrackableAssistantAgent(AssistantAgent):
         matches = re.findall(pattern, response)
         return list(set(matches))
     
-def get_data_analyst_team():
+def get_data_analyst_team(gh_pat: str, model: str) -> RoundRobinGroupChat:
     """
     Creates and returns a RoundRobinGroupChat instance consisting of a data analyst agent 
     and a code executor agent, designed to collaboratively analyze datasets, generate insights, 
     create visualizations, and execute Python code.
-    The function performs the following steps:
-    1. Loads environment variables using `load_dotenv`.
-    2. Initializes an AzureAIChatCompletionClient with the specified model, endpoint, and credentials.
-    3. Creates a PythonCodeExecutionTool for executing Python code in a local command-line environment.
-    4. Configures a `TrackableAssistantAgent` for data analysis (`DataAnalystAgent`) with detailed 
+    
+    Steps:
+    1. Initializes an AzureAIChatCompletionClient with the specified model, endpoint, and credentials.
+    2. Creates a PythonCodeExecutionTool for executing Python code in a local command-line environment.
+    3. Configures a `TrackableAssistantAgent` for data analysis (`DataAnalystAgent`) with detailed 
        system instructions for analyzing datasets, generating visualizations, and creating reports.
-    5. Configures a `TrackableAssistantAgent` for code execution (`CodeExecutorAgent`) with system 
+    4. Configures a `TrackableAssistantAgent` for code execution (`CodeExecutorAgent`) with system 
        instructions for executing Python code and handling errors.
-    6. Sets up a termination condition based on either a specific keyword ("TERMINATE") or a maximum 
+    5. Sets up a termination condition based on either a specific keyword ("TERMINATE") or a maximum 
        number of messages (15).
-    7. Combines the agents into a `RoundRobinGroupChat` to enable collaborative interaction.
+    6. Combines the agents into a `RoundRobinGroupChat` to enable collaborative interaction.
+    
+    Args:
+        gh_pat (str): GitHub personal access token for authentication.
+        model (str): The model name to be used by the AzureAIChatCompletionClient.
+    
     Returns:
         RoundRobinGroupChat: A group chat instance with the data analyst agent and code executor agent, 
         along with the defined termination conditions.
     """
 
-    load_dotenv()
+    # load_dotenv()
     # Create the Client
     model_client = AzureAIChatCompletionClient(
-        model="gpt-4o-mini",
+        # model="gpt-4o-mini",
+        model=model,
         endpoint="https://models.inference.ai.azure.com",
         # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings.
-        credential=AzureKeyCredential(os.getenv("GITHUB_TOKEN")),
+        # credential=AzureKeyCredential(os.getenv("GITHUB_TOKEN")),
+        credential=AzureKeyCredential(gh_pat),
         model_info={
             "json_output": True,
             "function_calling": True,
