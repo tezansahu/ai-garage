@@ -86,7 +86,12 @@ if gh_pat:
 
 if uploaded_file:
     try:
+        # Create a directory to save the uploaded file
+        if not os.path.exists("code_executor"):
+            os.makedirs("code_executor")
+        # Save the uploaded file to the local directory
         local_file_path = os.path.join("code_executor", uploaded_file.name)
+        
         st.write("### Data Preview")
         # Determine file type and read accordingly
         if uploaded_file.name.endswith(".csv"):
