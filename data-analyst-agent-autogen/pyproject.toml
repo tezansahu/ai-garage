@@ -1,0 +1,15 @@
+[project]
+name = "data-analyst-agent-autogen"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.11.16",
+    "autogen-agentchat>=0.4.9.3",
+    "autogen-ext[azure,openai]>=0.4.9.3",
+    "dotenv>=0.9.9",
+    "matplotlib>=3.10.1",
+    "seaborn>=0.13.2",
+    "streamlit>=1.44.0",
+]
