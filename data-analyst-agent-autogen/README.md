@@ -2,6 +2,12 @@
 
 A powerful multi-agent system built with AutoGen 0.4 that provides automated data analysis, visualization, and insights generation through an interactive chat interface.
 
+Check out the demos 👇🏼
+
+[![Data Analyst Agent - Demo 1](./assets/demo-1.png)](https://youtu.be/Gml54d2FBm0)
+
+[![Data Analyst Agent - Demo 2](./assets/demo-2.png)](https://youtu.be/aVxbSUrsEq4)
+
 ## Features
 
 - **Multi-Agent Architecture**
@@ -82,3 +88,6 @@ A powerful multi-agent system built with AutoGen 0.4 that provides automated dat
 3. Ask questions about your data in natural language
 4. View generated visualizations and insights
 5. Use "New Chat" to start fresh analysis
+
+
+Get me insights related to distribution of sales w.r.t outlet type
