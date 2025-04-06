@@ -21,6 +21,7 @@ Whether you're just beginning your AI journey, honing your skills as a practitio
 - [Agentic Workflow for Job Description-Based Resume Optimization (Powered by CrewAI)](./job-description-based-resume-optimizer/)
 - [Finance AI Agent using Model Context Protocol (MCP)](./mcp-agent/)
 - [Swarm Multiagent Debate using Autogen & Chainlit](./swarm-multiagent-debate-autogen-chainlit/)
+- [Data Analyst Agent (using AutoGen)](./data-analyst-agent-autogen/) - [⭐ Try it out LIVE ⭐](https://data-analyst-agent.streamlit.app/)
 
 > **More Projects Coming Soon**
 >

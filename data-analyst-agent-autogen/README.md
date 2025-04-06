@@ -2,6 +2,9 @@
 
 A powerful multi-agent system built with AutoGen 0.4 that provides automated data analysis, visualization, and insights generation through an interactive chat interface.
 
+[**📈 Try It Out!**](https://data-analyst-agent.streamlit.app/)
+
+
 Check out the demos 👇🏼
 
 [![Data Analyst Agent - Demo 1](./assets/demo-1.png)](https://youtu.be/Gml54d2FBm0)
