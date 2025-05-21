@@ -53,14 +53,14 @@ The optimized resume (markdown format) can also be downloaded.
 1. Clone the repository & get into the project directory
     ```sh
     git clone https://github.com/tezansahu/ai-garage.git
-    cd ai-garage/diagram-generator
+    cd ai-garage
     ```
 2. Install dependencies using Poetry:
     ```sh
     poetry shell
     poetry install
     ```
-3. `cd job-description-based-resume-optimizer`
+3. `cd job-description-based-resume-optimizer/src`
 4. Set up your environment variables in `.env` file.
 5. Run the Streamlit app:
     ```sh
