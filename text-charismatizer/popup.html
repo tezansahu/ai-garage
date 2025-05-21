@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Charismatizer Settings</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    button:hover {
+      background-color: #005a9e;
+    }
+    #status-message {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+      text-align: center;
+    }
+    .success {
+      background-color: #dff6dd;
+      color: #107c10;
+      border: 1px solid #107c10;
+    }
+    .error {
+      background-color: #fde7e9;
+      color: #c42b1c;
+      border: 1px solid #c42b1c;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-group">
+    <label for="github-pat">GitHub PAT Token:</label>
+    <input type="password" id="github-pat" placeholder="Enter your GitHub PAT token">
+  </div>
+  <div class="form-group">
+    <label for="model">LLM Model:</label>
+    <input type="text" id="model" placeholder="e.g., gpt-4o-mini">
+  </div>
+  <button id="save">Save Settings</button>
+  <div id="status-message"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

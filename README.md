@@ -22,7 +22,7 @@ Whether you're just beginning your AI journey, honing your skills as a practitio
 - [Finance AI Agent using Model Context Protocol (MCP)](./mcp-agent/)
 - [Swarm Multiagent Debate using Autogen & Chainlit](./swarm-multiagent-debate-autogen-chainlit/)
 - [Data Analyst Agent (using AutoGen)](./data-analyst-agent-autogen/) - [⭐ Try it out LIVE ⭐](https://data-analyst-agent.streamlit.app/)
-
+- [Text Charismatizer](./text-charismatizer/)
 > **More Projects Coming Soon**
 >
 > _Stay tuned for more exciting projects that will be added to this repository. Each project will come with detailed documentation to help you get started quickly._

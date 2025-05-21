@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Text Charismatizer",
+  "version": "1.0",
+  "description": "Make your text more charismatic using AI",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
