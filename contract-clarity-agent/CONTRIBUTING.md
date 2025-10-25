@@ -17,8 +17,8 @@ Thank you for your interest in contributing to Contract Clarity Agent! We welcom
 ### 1. Fork and Clone
 
 ```bash
-git clone https://github.com/your-username/contract-clarity-agent.git
-cd contract-clarity-agent
+git clone https://github.com/tezansahu/ai-garage.git
+cd ai-garage/contract-clarity-agent
 ```
 
 ### 2. Install UV Package Manager

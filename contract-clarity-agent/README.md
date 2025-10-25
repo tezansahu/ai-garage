@@ -40,8 +40,8 @@
 ### 1. Clone Repository
 
 ```bash
-git clone <your-repo-url>
-cd contract-clarity-agent
+git clone https://github.com/tezansahu/ai-garage.git
+cd ai-garage/contract-clarity-agent
 ```
 
 ### 2. Install UV
