@@ -10,6 +10,12 @@ from typing import Optional, Dict, Any
 from agent_framework import ChatAgent, ChatMessageStore
 from agent_framework.azure import AzureOpenAIChatClient
 
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
 from .document_processor import DocumentProcessor, WebContentExtractor
 
 # Configure logging for agent operations
@@ -21,6 +27,35 @@ if not logger.handlers:
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
+
+def setup_telemetry():
+    """Configure OpenTelemetry with OTLP exporter for Opik observability."""
+    # Create a resource with service name and other metadata
+    resource = Resource.create(
+        {
+            "service.name": "contract-clarity-agent",
+            "service.version": "0.1.0",
+            "deployment.environment": os.getenv("DEPLOYMENT_ENVIRONMENT", "development"),
+        }
+    )
+
+    # Create TracerProvider with the resource
+    provider = TracerProvider(resource=resource)
+
+    # Create BatchSpanProcessor with OTLPSpanExporter
+    processor = BatchSpanProcessor(OTLPSpanExporter())
+    provider.add_span_processor(processor)
+
+    # Set the TracerProvider
+    trace.set_tracer_provider(provider)
+
+    tracer = trace.get_tracer(__name__)
+    
+    logger.info("OpenTelemetry tracing initialized for Opik observability")
+
+    return tracer, provider
+
 
 class ContractClarityAgent:
     """Main agent for contract analysis and conversation."""
@@ -106,6 +141,20 @@ When answering follow-up questions:
         self.azure_api_key = azure_api_key or os.getenv("AZURE_OPENAI_API_KEY")
         self.azure_deployment = azure_deployment or os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
         self.api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2025-01-01-preview")
+        
+        # Set up OpenTelemetry for Opik observability if enabled
+        enable_otel = os.getenv("ENABLE_OTEL", "False").lower() == "true"
+        if enable_otel:
+            logger.info("ENABLE_OTEL is True, setting up OpenTelemetry")
+            os.environ["ENABLE_OTEL"] = "True"
+            enable_sensitive = os.getenv("ENABLE_SENSITIVE_DATA", "False").lower() == "true"
+            if enable_sensitive:
+                os.environ["ENABLE_SENSITIVE_DATA"] = "True"
+            self.tracer, self.tracer_provider = setup_telemetry()
+        else:
+            logger.info("ENABLE_OTEL is False, skipping OpenTelemetry setup")
+            self.tracer = None
+            self.tracer_provider = None
         
         logger.info(f"Initializing ContractClarityAgent with deployment: {self.azure_deployment}")
         
