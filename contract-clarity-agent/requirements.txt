@@ -1,0 +1,17 @@
+# Contract Clarity Agent - Dependencies
+# Generated from pyproject.toml for compatibility
+# Recommended to use: uv pip install -e . --prerelease=allow
+
+agent-framework[azure]>=0.1.0
+streamlit>=1.35.0
+firecrawl-py>=1.0.0
+docling>=2.0.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+pillow>=10.0.0
+
+# Development dependencies
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+black>=24.0.0
+ruff>=0.3.0
