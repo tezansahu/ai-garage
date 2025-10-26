@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAGE - Study Aid Generation Engine</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1 class="logo">🧠 SAGE</h1>
+                    <p class="tagline">Study Aid Generation Engine</p>
+                </div>
+                <button id="settings-btn" class="settings-btn" title="API Configuration">
+                    ⚙️ Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section id="hero-section" class="hero-section">
+                <h2 class="hero-title">Smart Study Materials in Seconds</h2>
+                <p class="hero-subtitle">Paste any educational URL and get AI-powered study guides, flashcards, and quizzes</p>
+                
+                <!-- How It Works -->
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <p class="step-text">Paste URL</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <p class="step-text">Choose Tool</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <p class="step-text">Study Smarter!</p>
+                    </div>
+                </div>
+
+                <!-- URL Input Section -->
+                <div class="url-input-section">
+                    <label for="url-input" class="input-label">Enter Study Resource URL</label>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="url-input" 
+                            class="url-input" 
+                            placeholder="Paste your study resource URL here (e.g., blog post, article, notes)"
+                            maxlength="2048"
+                        >
+                        <button id="scrape-btn" class="btn btn-primary">
+                            <span class="btn-text">Extract Content</span>
+                            <span class="btn-loader" style="display: none;">
+                                <span class="spinner"></span> Loading...
+                            </span>
+                        </button>
+                    </div>
+                    <div id="url-error" class="error-message" style="display: none;"></div>
+                    
+                    <!-- Sample URLs -->
+                    <div class="sample-urls">
+                        <p class="sample-label">Try these sample URLs:</p>
+                        <div class="url-chips">
+                            <button class="chip" data-url="https://www.britannica.com/science/photosynthesis">Photosynthesis Guide</button>
+                            <button class="chip" data-url="https://easyengineeringhub.in/the-basics-of-work-energy-and-power-in-physics/">Work, Energy & Power</button>
+                            <button class="chip" data-url="https://en.wikipedia.org/wiki/World_War_II">World War II</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Preview Section -->
+            <section id="preview-section" class="preview-section" style="display: none;">
+                <div class="card">
+                    <div class="preview-header">
+                        <button class="back-btn" onclick="resetToHome()">← Enter New URL</button>
+                    </div>
+                    <h3 class="section-title">✅ Content Loaded Successfully!</h3>
+                    <div class="url-display">
+                        <strong>Source:</strong> <a id="source-url" href="" target="_blank" class="source-link"></a>
+                    </div>
+                    <p id="word-count" class="word-count"></p>
+                    <p class="success-message">Choose a study tool below to get started:</p>
+                </div>
+
+                <!-- Tool Selection -->
+                <div class="tool-selector">
+                    <button id="study-guide-btn" class="tool-btn">
+                        <span class="tool-icon">📝</span>
+                        <span class="tool-name">Study Guide</span>
+                        <span class="tool-desc">Key concepts & questions</span>
+                    </button>
+                    <button id="flashcards-btn" class="tool-btn">
+                        <span class="tool-icon">🃏</span>
+                        <span class="tool-name">Flashcards</span>
+                        <span class="tool-desc">Interactive practice cards</span>
+                    </button>
+                    <button id="quiz-btn" class="tool-btn">
+                        <span class="tool-icon">✍️</span>
+                        <span class="tool-name">Quiz</span>
+                        <span class="tool-desc">Test your knowledge</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Study Guide Section -->
+            <section id="study-guide-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <button class="back-btn" onclick="backToTools()">← Back to Tools</button>
+                    <h2 class="section-title">📝 Study Guide</h2>
+                </div>
+                <div id="study-guide-loading" class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Generating your study guide... This may take 15-30 seconds.</p>
+                </div>
+                <div id="study-guide-content" class="study-guide-content" style="display: none;">
+                    <button id="copy-guide-btn" class="btn btn-secondary">📋 Copy to Clipboard</button>
+                    <div id="study-guide-output"></div>
+                </div>
+            </section>
+
+            <!-- Flashcards Section -->
+            <section id="flashcards-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <button class="back-btn" onclick="backToTools()">← Back to Tools</button>
+                    <h2 class="section-title">🃏 Flashcards</h2>
+                </div>
+                
+                <!-- Flashcard Config -->
+                <div id="flashcard-config" class="flashcard-config">
+                    <div class="config-group">
+                        <label for="flashcard-difficulty">Difficulty Level:</label>
+                        <select id="flashcard-difficulty" class="select-input">
+                            <option value="Easy">Easy - Basic definitions and facts</option>
+                            <option value="Medium" selected>Medium - Conceptual understanding</option>
+                            <option value="Hard">Hard - Application and synthesis</option>
+                        </select>
+                    </div>
+                    <div class="config-group">
+                        <label for="flashcard-count">Number of Cards: <span id="card-count-display">15</span></label>
+                        <input type="range" id="flashcard-count" class="slider" min="10" max="30" value="15">
+                    </div>
+                    <button id="generate-flashcards-btn" class="btn btn-primary">Generate Flashcards</button>
+                </div>
+
+                <div id="flashcards-loading" class="loading-state" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Creating your flashcards...</p>
+                </div>
+
+                <!-- Flashcard Display -->
+                <div id="flashcards-display" class="flashcards-display" style="display: none;">
+                    <div class="flashcard-controls">
+                        <div class="flashcard-progress">
+                            <span id="current-card-num">1</span> / <span id="total-cards">0</span>
+                        </div>
+                        <div class="flashcard-actions">
+                            <button id="shuffle-btn" class="btn-icon" title="Shuffle">🔀</button>
+                            <button id="mark-mastered-btn" class="btn-icon" title="Mark as mastered">⭐</button>
+                        </div>
+                    </div>
+
+                    <div id="flashcard-container" class="flashcard-container">
+                        <div class="flashcard" id="current-flashcard">
+                            <div class="flashcard-inner">
+                                <div class="flashcard-front">
+                                    <p class="flashcard-text" id="card-front-text"></p>
+                                </div>
+                                <div class="flashcard-back">
+                                    <p class="flashcard-text" id="card-back-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard-navigation">
+                        <button id="prev-card-btn" class="btn btn-secondary">← Previous</button>
+                        <button id="flip-card-btn" class="btn btn-primary">Flip Card</button>
+                        <button id="next-card-btn" class="btn btn-secondary">Next →</button>
+                    </div>
+
+                    <div class="mastered-counter">
+                        <span id="mastered-count">0</span> mastered / <span id="remaining-count">0</span> remaining
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <button class="back-btn" onclick="backToTools()">← Back to Tools</button>
+                    <h2 class="section-title">✍️ Quiz</h2>
+                </div>
+
+                <!-- Quiz Config -->
+                <div id="quiz-config" class="quiz-config">
+                    <div class="config-group">
+                        <label for="quiz-difficulty">Difficulty Level:</label>
+                        <select id="quiz-difficulty" class="select-input">
+                            <option value="Easy">Easy - Straightforward recall</option>
+                            <option value="Medium" selected>Medium - Conceptual understanding</option>
+                            <option value="Hard">Hard - Application-based</option>
+                        </select>
+                    </div>
+                    <p class="quiz-info">10 multiple-choice questions</p>
+                    <button id="generate-quiz-btn" class="btn btn-primary">Generate Quiz</button>
+                </div>
+
+                <div id="quiz-loading" class="loading-state" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Creating your quiz...</p>
+                </div>
+
+                <!-- Quiz Display -->
+                <div id="quiz-display" class="quiz-display" style="display: none;">
+                    <div class="quiz-progress-bar">
+                        <div id="quiz-progress" class="quiz-progress" style="width: 0%;"></div>
+                    </div>
+                    <div class="quiz-info-bar">
+                        <span id="question-number">Question 1 of 10</span>
+                        <span id="quiz-score">Score: 0/10</span>
+                    </div>
+
+                    <div id="quiz-question-container" class="quiz-question-container">
+                        <h3 id="question-text" class="question-text"></h3>
+                        <div id="options-container" class="options-container"></div>
+                        <div id="answer-feedback" class="answer-feedback" style="display: none;"></div>
+                        <div class="quiz-buttons">
+                            <button id="submit-answer-btn" class="btn btn-primary" disabled>Submit Answer</button>
+                            <button id="next-question-btn" class="btn btn-secondary" style="display: none;">Next Question</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz End Screen -->
+                <div id="quiz-end" class="quiz-end" style="display: none;">
+                    <h2 class="quiz-final-title">Quiz Complete!</h2>
+                    <div class="quiz-final-score">
+                        <span id="final-score-text"></span>
+                        <p id="performance-message" class="performance-message"></p>
+                    </div>
+                    
+                    <div class="quiz-review">
+                        <h3>Question Review</h3>
+                        <div id="quiz-review-container"></div>
+                    </div>
+
+                    <div class="quiz-end-buttons">
+                        <button id="retake-quiz-btn" class="btn btn-secondary">🔄 Retake Quiz</button>
+                        <button id="new-quiz-btn" class="btn btn-primary">Generate New Quiz</button>
+                        <button onclick="backToTools()" class="btn btn-secondary">← Back to Tools</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>SAGE - Study Aid Generation Engine</p>
+            <p class="footer-note">Powered by Azure AI Foundry & Firecrawl</p>
+        </div>
+    </footer>
+
+    <!-- Configuration Modal -->
+    <div id="config-modal-overlay" class="modal-overlay" style="display: none;"></div>
+    <div id="config-modal" class="config-modal" style="display: none;">
+        <div class="modal-content">
+            <h2 class="modal-title">🔑 API Configuration Required</h2>
+            <p class="modal-description">
+                SAGE needs API keys to function. Your credentials will be stored securely in your browser's local storage.
+            </p>
+            
+            <div id="config-modal-error" class="modal-error" style="display: none;"></div>
+            
+            <form class="config-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="firecrawl-key-input">
+                        Firecrawl API Key
+                        <a href="https://www.firecrawl.dev/" target="_blank" class="help-link">Get Key →</a>
+                    </label>
+                    <input 
+                        type="password" 
+                        id="firecrawl-key-input" 
+                        class="config-input"
+                        placeholder="fc-xxxxxxxxxxxxxxxx"
+                        autocomplete="off"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="azure-key-input">
+                        Azure AI API Key
+                        <a href="https://ai.azure.com/" target="_blank" class="help-link">Get Key →</a>
+                    </label>
+                    <input 
+                        type="password" 
+                        id="azure-key-input" 
+                        class="config-input"
+                        placeholder="Your Azure AI API Key"
+                        autocomplete="off"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="azure-endpoint-input">
+                        Azure AI Endpoint URL
+                        <span class="help-text">Full endpoint with deployment name and API version</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="azure-endpoint-input" 
+                        class="config-input"
+                        placeholder="https://your-resource.openai.azure.com/openai/deployments/..."
+                        autocomplete="off"
+                    >
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" id="save-config-btn" class="btn btn-primary">
+                        💾 Save Configuration
+                    </button>
+                </div>
+                
+                <p class="modal-note">
+                    <strong>Privacy:</strong> Your API keys are stored locally in your browser and never sent to any server except the respective APIs.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="config-manager.js"></script>
+    <script src="utils.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
