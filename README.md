@@ -14,6 +14,10 @@ This space is designed to combine deep learning with hands-on experimentation, h
 
 Whether you're just beginning your AI journey, honing your skills as a practitioner, or pushing boundaries as a researcher, this repository has resources to fuel your growth and creativity.
 
+## Claude Code Skills
+
+A collection of reusable [Claude Code skills](./skills/) for everyday AI-assisted development — covering project pitches, insight extraction, and more. Each skill is self-contained and easy to install globally or per-project. See the [skills README](./skills/README.md) for installation instructions.
+
 ## Projects
 
 - [AI Powered Diagram Generator](./diagram-generator/)
