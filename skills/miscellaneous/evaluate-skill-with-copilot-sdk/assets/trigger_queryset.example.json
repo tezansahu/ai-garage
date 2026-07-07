@@ -1,0 +1,78 @@
+{
+  "skill_name": "csv-analyzer",
+  "description": "Triggering eval for csv-analyzer — tests whether the agent correctly routes data-analysis requests to this skill vs. handling them as general coding/ETL tasks.",
+  "evals": [
+    {
+      "id": 1,
+      "query": "I've got monthly sales in ~/data/sales_2025.csv, revenue in col C — can you find the top 3 months and chart them?",
+      "should_trigger": true,
+      "rationale": "Clear data-analysis ask: find top-N from a CSV column and visualize. Core csv-analyzer territory."
+    },
+    {
+      "id": 2,
+      "query": "there's a customers.csv in my downloads, some rows have blank emails. clean it up and tell me how many were missing",
+      "should_trigger": true,
+      "rationale": "Data cleaning + summary stat from a CSV. Matches the skill's 'clean and summarize' capability."
+    },
+    {
+      "id": 3,
+      "query": "summarize the numeric columns in this dataset and flag any outliers",
+      "should_trigger": true,
+      "rationale": "Statistical summary request. Even without naming a file, the intent is data analysis."
+    },
+    {
+      "id": 4,
+      "query": "my boss dumped a giant tsv of survey responses on me and wants the average score per region",
+      "should_trigger": true,
+      "rationale": "Group-by aggregation from tabular data. TSV is a CSV variant the skill handles."
+    },
+    {
+      "id": 5,
+      "query": "make a quick bar chart from the attached spreadsheet of quarterly headcount",
+      "should_trigger": true,
+      "rationale": "Visualization from tabular data. 'Spreadsheet' implies CSV/TSV-like structure."
+    },
+    {
+      "id": 6,
+      "query": "parse data/input.csv, drop rows where column B is null, write the result to data/clean.csv",
+      "should_trigger": true,
+      "rationale": "Filter + write-back on CSV data. Core data-wrangling task."
+    },
+    {
+      "id": 7,
+      "query": "what's the correlation between price and units_sold in this file?",
+      "should_trigger": true,
+      "rationale": "Statistical correlation analysis. Clearly data-analysis territory."
+    },
+    {
+      "id": 8,
+      "query": "write a python script that reads a csv and uploads each row to our postgres orders table",
+      "should_trigger": false,
+      "rationale": "Near-miss: involves CSV but the task is ETL/database ingestion, not analysis. The user wants a script, not insights."
+    },
+    {
+      "id": 9,
+      "query": "I need to fix the VLOOKUP formulas in my Excel budget workbook, they're returning #N/A",
+      "should_trigger": false,
+      "rationale": "Near-miss: tabular data but it's Excel formula debugging, not CSV analysis."
+    },
+    {
+      "id": 10,
+      "query": "convert this config.csv into a yaml file for our deploy pipeline",
+      "should_trigger": false,
+      "rationale": "Near-miss: reads a CSV but the goal is format conversion for infrastructure, not data analysis."
+    },
+    {
+      "id": 11,
+      "query": "how do I export a Google Sheet as a CSV from the API?",
+      "should_trigger": false,
+      "rationale": "Near-miss: mentions CSV but it's an API-usage question, not a data-analysis task."
+    },
+    {
+      "id": 12,
+      "query": "the CSV import in our web app is throwing an encoding error on upload, can you debug the parser?",
+      "should_trigger": false,
+      "rationale": "Near-miss: CSV keyword but it's application debugging, not data analysis."
+    }
+  ]
+}

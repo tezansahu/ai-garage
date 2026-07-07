@@ -1,0 +1,44 @@
+{
+  "skill_name": "csv-analyzer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "top-months-chart",
+      "prompt": "I have monthly sales data in sales_2025.csv (a 'month' column and a 'revenue' column). Find the top 3 months by revenue and make a bar chart.",
+      "expected_output": "A bar chart image of the top 3 months by revenue, with labeled axes and the values shown.",
+      "files": ["evals/files/sales_2025.csv"],
+      "assertions": [
+        "An image file (e.g. .png) is produced in the outputs",
+        "The chart shows exactly 3 months",
+        "Both the x-axis and y-axis are labeled",
+        "The three months shown are the correct top 3 by revenue from the input"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "clean-missing-emails",
+      "prompt": "customers.csv has some rows with missing values in the 'email' column. Remove those rows, write the cleaned data to customers_clean.csv, and tell me how many rows were dropped.",
+      "expected_output": "A cleaned CSV with no blank emails, plus a stated count of dropped rows.",
+      "files": ["evals/files/customers.csv"],
+      "assertions": [
+        "A cleaned CSV file is written",
+        "The cleaned file contains no rows with a blank email",
+        "The response states the number of rows that were dropped",
+        "The stated dropped-row count matches the actual number removed"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "summary-stats-edge",
+      "prompt": "Give me summary statistics for readings.csv. Heads up: one column is mostly text with a few stray numbers, and another has some empty cells.",
+      "expected_output": "Summary stats for the genuinely numeric columns, handling the messy/empty cells sensibly rather than crashing or reporting garbage.",
+      "files": ["evals/files/readings.csv"],
+      "assertions": [
+        "Summary statistics are reported for the numeric columns",
+        "The mostly-text column is not treated as numeric (no nonsense mean reported for it)",
+        "Missing/empty cells are handled explicitly rather than silently corrupting the stats",
+        "No unhandled error or traceback appears in the response"
+      ]
+    }
+  ]
+}

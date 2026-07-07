@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Skill eval review</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --line:#e2e2e2; --with:#0b7; --without:#c60; --card:#fafafa; }
+  * { box-sizing: border-box; }
+  body { font:14px/1.5 system-ui, sans-serif; color:var(--fg); margin:0; background:var(--bg); }
+  header { position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--line); padding:12px 20px; display:flex; gap:16px; align-items:center; z-index:5; }
+  header h1 { font-size:16px; margin:0; }
+  .tabs { display:flex; gap:8px; margin-left:auto; }
+  .tab { padding:6px 14px; border:1px solid var(--line); border-radius:6px; cursor:pointer; background:var(--card); }
+  .tab.active { background:var(--fg); color:#fff; }
+  main { padding:20px; max-width:1200px; margin:0 auto; }
+  .nav { display:flex; gap:10px; align-items:center; margin-bottom:16px; }
+  button { font:inherit; padding:6px 12px; border:1px solid var(--line); border-radius:6px; background:var(--card); cursor:pointer; }
+  button:hover { background:#eee; }
+  .prompt { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 16px; margin-bottom:16px; white-space:pre-wrap; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .col { border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .col h3 { margin:0; padding:8px 14px; font-size:13px; color:#fff; }
+  .col.with h3 { background:var(--with); }
+  .col.without h3 { background:var(--without); }
+  .col .body { padding:12px 14px; }
+  .meta { color:var(--muted); font-size:12px; margin-bottom:8px; }
+  pre { white-space:pre-wrap; word-break:break-word; background:var(--card); padding:10px; border-radius:6px; max-height:340px; overflow:auto; margin:6px 0; }
+  img.out { max-width:100%; border:1px solid var(--line); border-radius:6px; margin:6px 0; }
+  .file { margin:8px 0; }
+  .file b { font-size:12px; }
+  details { margin:8px 0; }
+  summary { cursor:pointer; font-weight:600; }
+  .grade { font-size:13px; }
+  .pass { color:var(--with); } .fail { color:#c00; }
+  textarea { width:100%; min-height:70px; font:inherit; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:8px; }
+  table { border-collapse:collapse; width:100%; margin:10px 0; }
+  th,td { border:1px solid var(--line); padding:8px 10px; text-align:left; }
+  th { background:var(--card); }
+  .note { background:#fff8e1; border:1px solid #f0d98c; border-radius:6px; padding:8px 12px; margin:6px 0; }
+  .hidden { display:none; }
+  .delta-pos { color:var(--with); font-weight:600; } .delta-neg { color:#c00; font-weight:600; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Skill eval review</h1>
+  <div class="tabs">
+    <div class="tab active" data-tab="outputs">Outputs</div>
+    <div class="tab" data-tab="benchmark">Benchmark</div>
+  </div>
+</header>
+<main>
+  <section id="outputs">
+    <div class="nav">
+      <button id="prev">&larr; Prev</button>
+      <span id="counter"></span>
+      <button id="next">Next &rarr;</button>
+      <button id="export" style="margin-left:auto">Submit All Reviews (download feedback.json)</button>
+    </div>
+    <div id="eval-view"></div>
+  </section>
+  <section id="benchmark" class="hidden"></section>
+</main>
+<script>
+const DATA = __DATA__;
+const fb = JSON.parse(localStorage.getItem("skilleval_feedback_" + DATA.skill_name) || "{}");
+let idx = 0;
+
+function esc(s){ return (s==null?"":String(s)).replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function renderFiles(files){
+  if(!files || !files.length) return '<div class="meta">No files produced.</div>';
+  return files.map(f=>{
+    if(f.kind==="image") return `<div class="file"><b>${esc(f.name)}</b><br><img class="out" src="${f.data}"></div>`;
+    if(f.kind==="text") return `<div class="file"><b>${esc(f.name)}</b><pre>${esc(f.text)}</pre></div>`;
+    return `<div class="file"><b>${esc(f.name)}</b> <span class="meta">(${esc(f.note||"binary")})</span></div>`;
+  }).join("");
+}
+
+function renderGrade(g){
+  if(!g || !g.assertion_results || !g.assertion_results.length) return "";
+  const rows = g.assertion_results.map(a=>`<div class="grade">${a.passed?'<span class="pass">✓</span>':'<span class="fail">✗</span>'} ${esc(a.text)}<br><span class="meta">${esc(a.evidence)}</span></div>`).join("");
+  const s = g.summary||{};
+  return `<details><summary>Grades ${s.passed||0}/${s.total||0}</summary>${rows}</details>`;
+}
+
+function renderCol(cls, label, run){
+  if(!run) return `<div class="col ${cls}"><h3>${label}</h3><div class="body meta">No run.</div></div>`;
+  return `<div class="col ${cls}"><h3>${label} — ${run.skill_invoked?"skill used":"skill not used"}</h3><div class="body">
+    <div class="meta">${run.tokens} tokens · ${run.time}s · ${(run.output_files||[]).length} file(s)</div>
+    <details open><summary>Response</summary><pre>${esc(run.response)}</pre></details>
+    ${renderFiles(run.output_files)}
+    ${renderGrade(run.grading)}
+  </div></div>`;
+}
+
+function renderEval(){
+  const e = DATA.evals[idx];
+  document.getElementById("counter").textContent = `${idx+1} / ${DATA.evals.length} — ${e.name}`;
+  document.getElementById("eval-view").innerHTML = `
+    <div class="prompt"><b>Prompt:</b>\n${esc(e.prompt)}</div>
+    <div class="cols">${renderCol("with","With skill",e.with_skill)}${renderCol("without","Baseline (no skill)",e.without_skill)}</div>
+    <textarea id="fb" placeholder="Feedback for this test case — what's wrong, what's missing, what to change. Empty = looked fine.">${esc(fb[e.name]||"")}</textarea>`;
+  const ta = document.getElementById("fb");
+  ta.addEventListener("input", ()=>{ fb[e.name]=ta.value; localStorage.setItem("skilleval_feedback_"+DATA.skill_name, JSON.stringify(fb)); });
+}
+
+function renderBenchmark(){
+  const b = DATA.benchmark || {};
+  const s = b.run_summary || {};
+  const cfg = c => s[c] ? `<td>${(s[c].pass_rate.mean*100).toFixed(0)}% ±${(s[c].pass_rate.stddev*100).toFixed(0)}</td><td>${s[c].time_seconds.mean.toFixed(1)}s</td><td>${s[c].tokens.mean.toFixed(0)}</td>` : "<td>-</td><td>-</td><td>-</td>";
+  let html = `<h2>Benchmark — iteration ${DATA.iteration}</h2>
+    <table><tr><th>Configuration</th><th>Pass rate</th><th>Time</th><th>Tokens</th></tr>
+    <tr><td>With skill</td>${cfg("with_skill")}</tr>
+    <tr><td>Baseline (no skill)</td>${cfg("without_skill")}</tr></table>`;
+  if(s.delta){
+    const d=s.delta, pc = d.pass_rate>=0?"delta-pos":"delta-neg";
+    html += `<p>Delta — pass rate <span class="${pc}">${(d.pass_rate*100).toFixed(0)}pp</span>, time ${d.time_seconds>=0?"+":""}${d.time_seconds.toFixed(1)}s, tokens ${d.tokens>=0?"+":""}${d.tokens.toFixed(0)}</p>`;
+  }
+  (b.notes||[]).forEach(n=> html += `<div class="note">${esc(n)}</div>`);
+  document.getElementById("benchmark").innerHTML = html;
+}
+
+document.querySelectorAll(".tab").forEach(t=> t.addEventListener("click", ()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  const tab = t.dataset.tab;
+  document.getElementById("outputs").classList.toggle("hidden", tab!=="outputs");
+  document.getElementById("benchmark").classList.toggle("hidden", tab!=="benchmark");
+}));
+document.getElementById("prev").onclick = ()=>{ idx=(idx-1+DATA.evals.length)%DATA.evals.length; renderEval(); };
+document.getElementById("next").onclick = ()=>{ idx=(idx+1)%DATA.evals.length; renderEval(); };
+document.addEventListener("keydown", e=>{ if(e.key==="ArrowLeft")document.getElementById("prev").click(); if(e.key==="ArrowRight")document.getElementById("next").click(); });
+document.getElementById("export").onclick = ()=>{
+  const out = { reviews: DATA.evals.map(e=>({ eval_name:e.name, feedback: fb[e.name]||"" })), status:"complete" };
+  const blob = new Blob([JSON.stringify(out,null,2)], {type:"application/json"});
+  const a = document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="feedback.json"; a.click();
+};
+document.getElementById("title").textContent = `Skill eval review — ${DATA.skill_name} (iteration ${DATA.iteration})`;
+renderEval(); renderBenchmark();
+</script>
+</body>
+</html>

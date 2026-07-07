@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triggering Eval Dashboard</title>
+<style>
+  :root { --bg:#f8fafc; --fg:#1e293b; --muted:#64748b; --line:#e2e8f0; --card:#fff; --green:#22c55e; --yellow:#eab308; --red:#ef4444; }
+  * { box-sizing: border-box; }
+  body { font:14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color:var(--fg); margin:0; background:var(--bg); }
+  header { position:sticky; top:0; background:var(--card); border-bottom:1px solid var(--line); padding:14px 24px; z-index:5; }
+  header h1 { font-size:18px; margin:0 0 4px; }
+  .meta { color:var(--muted); font-size:12px; }
+  main { padding:24px; max-width:1100px; margin:0 auto; }
+  h2 { font-size:15px; margin:24px 0 12px; }
+  table { border-collapse:collapse; width:100%; margin:0 0 16px; background:var(--card); border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+  th, td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--line); }
+  th { background:#f1f5f9; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .green { color:var(--green); font-weight:600; }
+  .yellow { color:var(--yellow); font-weight:600; }
+  .red { color:var(--red); font-weight:600; }
+  details { margin:12px 0; background:var(--card); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden; }
+  summary { cursor:pointer; padding:12px 16px; font-weight:600; font-size:14px; }
+  summary:hover { background:#f1f5f9; }
+  .detail-body { padding:0 16px 16px; }
+  .desc { color:var(--muted); font-size:12px; margin:0 0 10px; font-style:italic; }
+  table.detail { font-size:13px; }
+  table.detail td { padding:6px 10px; }
+  tr.pass { background:#f0fdf4; }
+  tr.fail { background:#fef2f2; }
+  .query-cell { max-width:500px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .query-cell:hover { white-space:normal; word-break:break-word; }
+  code { background:#f1f5f9; padding:2px 5px; border-radius:3px; font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Triggering Eval Dashboard</h1>
+  <div class="meta" id="meta"></div>
+</header>
+<main>
+  <h2>Summary</h2>
+  <table id="summary-table">
+    <thead><tr><th>Skill</th><th class="num">Passed</th><th class="num">Accuracy</th><th class="num">F1</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">Runs/Q</th></tr></thead>
+    <tbody id="summary-body"></tbody>
+  </table>
+  <h2>Per-Query Details</h2>
+  <div id="details"></div>
+</main>
+<script>
+const DATA = __DATA__;
+
+document.getElementById('meta').textContent =
+  `Model: ${DATA.model} | Runs/query: ${DATA.runs_per_query} | Threshold: ${DATA.threshold} | Generated: ${DATA.timestamp}`;
+
+function pct(v) { return (v * 100).toFixed(0) + '%'; }
+function f1(p, r) { return (p + r) > 0 ? 2 * p * r / (p + r) : 0; }
+function colorClass(v) { return v >= 0.9 ? 'green' : v >= 0.7 ? 'yellow' : 'red'; }
+
+const tbody = document.getElementById('summary-body');
+for (const skill of DATA.skills) {
+  const s = skill.summary;
+  const f1v = f1(s.precision, s.recall);
+  tbody.innerHTML += `<tr>
+    <td><strong>${skill.skill_name}</strong></td>
+    <td class="num">${s.passed}/${s.queries}</td>
+    <td class="num ${colorClass(s.accuracy)}">${pct(s.accuracy)}</td>
+    <td class="num ${colorClass(f1v)}">${pct(f1v)}</td>
+    <td class="num">${pct(s.precision)}</td>
+    <td class="num">${pct(s.recall)}</td>
+    <td class="num">${skill.runs_per_query}</td>
+  </tr>`;
+}
+
+const details = document.getElementById('details');
+for (const skill of DATA.skills) {
+  const s = skill.summary;
+  const f1v = f1(s.precision, s.recall);
+  let rows = '';
+  for (const r of skill.results) {
+    const cls = r.pass ? 'pass' : 'fail';
+    const want = r.should_trigger ? 'trigger' : 'no-trig';
+    rows += `<tr class="${cls}">
+      <td>${r.pass ? 'PASS' : 'FAIL'}</td>
+      <td>${want}</td>
+      <td class="num">${r.triggers}/${r.runs}</td>
+      <td class="num">${pct(r.trigger_rate)}</td>
+      <td class="query-cell" title="${r.query.replace(/"/g, '&quot;')}">${r.query}</td>
+    </tr>`;
+  }
+  details.innerHTML += `<details>
+    <summary>${skill.skill_name} — ${s.passed}/${s.queries} pass, accuracy=${pct(s.accuracy)}, F1=${pct(f1v)}</summary>
+    <div class="detail-body">
+      <p class="desc">${skill.description || ''}</p>
+      <table class="detail">
+        <tr><th>Status</th><th>Want</th><th class="num">Triggered</th><th class="num">Rate</th><th>Query</th></tr>
+        ${rows}
+      </table>
+    </div>
+  </details>`;
+}
+</script>
+</body>
+</html>
