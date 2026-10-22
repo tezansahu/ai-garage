@@ -5,3 +5,7 @@ __pycache__/
 model_config.yaml
 chainlit.md
 tmp_*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.streamlit/secrets.toml

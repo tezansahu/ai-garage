@@ -29,6 +29,7 @@ A collection of reusable [Claude Code skills](./skills/) for everyday AI-assiste
 - [Text Charismatizer](./text-charismatizer/)
 - [Contract Clarity Agent](./contract-clarity-agent/)
 - [SAGE (Study Aid Generation Engine) - a fully Vibe-Coded Project](./sage-vibe-coding/)
+- [Decision Models Playground (Microsoft Decision-1 vs. GPT-5-mini)](./decision-models-playground/)
 
 > **More Projects Coming Soon**
 >
