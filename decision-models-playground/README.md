@@ -1,5 +1,12 @@
 # Decision Models Playground
 
+[![Decision-1 vs GPT-5-mini on a two-question prompt-injection screen: latency and token usage compared](assets/demo.gif)](https://github.com/tezansahu/ai-garage/blob/master/decision-models-playground/assets/demo.mp4)
+
+**[▶ Watch the demo](https://github.com/tezansahu/ai-garage/blob/master/decision-models-playground/assets/demo.mp4)**: a two-question
+prompt-injection screen run on Decision-1 and GPT-5-mini side by side. In this recorded run, Decision-1 answered
+**2.3× faster** (4.6 s vs 10.6 s) with **3.4× fewer tokens** (279 vs 937), and both chose the same verdict. One observed
+run, not a benchmark.
+
 A local Streamlit playground that puts **decision models** side by side with
 **general-purpose LLMs** on the same tasks. **Microsoft Decision-1** is purpose-built to answer
 typed questions directly with label probabilities. **GPT-5-mini**, an optional baseline,
